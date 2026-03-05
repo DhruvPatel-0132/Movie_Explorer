@@ -1,16 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchMoviesFromAPI } from "../../api/omdbApi";
 
-// Simulate async login/register
-export const loginUser = createAsyncThunk(
-  'auth/loginUser',
-  async (userData, { rejectWithValue }) => {
+export const fetchMovies = createAsyncThunk(
+  "movies/fetchMovies",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState().movies;
+    const { searchTerm, page } = state;
+
     try {
-      // Replace this with actual API call
-      await new Promise((res) => setTimeout(res, 1000));
-      return userData; // returning user data as payload
-    } catch (err) {
-      return rejectWithValue(err.message);
+      const data = await fetchMoviesFromAPI(searchTerm, page);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
@@ -23,7 +24,7 @@ const initialState = {
   error: null,
   page: 1,
   totalResults: 0,
-  hasMore: false,
+  hasMore: true,
 };
 
 const movieSlice = createSlice({
@@ -54,10 +55,6 @@ const movieSlice = createSlice({
 
     setSearchTerm: (state, action) => {
       state.searchTerm = action.payload;
-      state.movies = [];
-      state.page = 1;
-      state.totalResults = 0;
-      state.hasMore = true;
     },
 
     resetMovies: (state) => {
