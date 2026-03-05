@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addToWatchlist,
   removeFromWatchlist,
-} from "../features/movies/moviesSlice";
+} from "../features/movies/moviesSlice.js";
 
 export default function MovieCard({ movie }) {
   const dispatch = useDispatch();
