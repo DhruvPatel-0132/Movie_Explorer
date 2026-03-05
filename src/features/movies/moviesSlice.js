@@ -24,7 +24,7 @@ const initialState = {
   error: null,
   page: 1,
   totalResults: 0,
-  hasMore: true,
+  hasMore: false,
 };
 
 const movieSlice = createSlice({
@@ -53,9 +53,13 @@ const movieSlice = createSlice({
       if (movie) movie.watched = !movie.watched;
     },
 
-    setSearchTerm: (state, action) => {
-      state.searchTerm = action.payload;
-    },
+setSearchTerm: (state, action) => {
+  state.searchTerm = action.payload;
+  state.movies = [];
+  state.page = 1;
+  state.totalResults = 0;
+  state.hasMore = true;
+},
 
     resetMovies: (state) => {
       state.movies = [];
