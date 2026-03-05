@@ -27,6 +27,7 @@ export default function LoginForm() {
     const newErrors = {};
     if (!formData.email.trim()) newErrors.email = "Email is required";
     if (!formData.password) newErrors.password = "Password is required";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -34,43 +35,78 @@ export default function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-
     dispatch(loginUser(formData));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+    <div className="min-h-screen flex items-center justify-center">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            className="w-full border px-3 py-2 rounded"
-            value={formData.email}
-            onChange={handleChange}
-          />
+      <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-200">
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            className="w-full border px-3 py-2 rounded"
-            value={formData.password}
-            onChange={handleChange}
-          />
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Welcome Back
+        </h2>
 
-          {error && <p className="text-red-500">{error}</p>}
+        <p className="text-center text-gray-500 mb-6">
+          Login to continue
+        </p>
 
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Email */}
+          <div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              className={`w-full border px-4 py-3 rounded-lg outline-none transition focus:ring-2 focus:ring-blue-500 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
+              value={formData.email}
+              onChange={handleChange}
+            />
+            {errors.email && (
+              <p className="text-sm text-red-500 mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* Password */}
+          <div>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className={`w-full border px-4 py-3 rounded-lg outline-none transition focus:ring-2 focus:ring-blue-500 ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
+              value={formData.password}
+              onChange={handleChange}
+            />
+            {errors.password && (
+              <p className="text-sm text-red-500 mt-1">{errors.password}</p>
+            )}
+          </div>
+
+          {/* Redux Error */}
+          {error && (
+            <div className="bg-red-100 text-red-600 text-sm p-3 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {/* Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 rounded"
+            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold flex items-center justify-center"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? (
+              <span className="animate-pulse">Logging in...</span>
+            ) : (
+              "Login"
+            )}
           </button>
+
         </form>
       </div>
     </div>
